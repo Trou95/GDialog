@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "node ./build.js",
+    "watch": "esbuild --watch ./src/index.ts --outdir=dist --bundle"
+  },
+  "devDependencies": {
+    "esbuild": "0.20.2"
+  }
+}
