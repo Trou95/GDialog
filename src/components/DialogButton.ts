@@ -2,8 +2,13 @@ import {ComponentBase, ComponentType} from "./ComponentBase";
 import {IElementStyleOptions} from "../interfaces/IElementStyleOptions";
 import {ElementBase} from "./ElementBase";
 
+export enum ButtonType {
+    Submit = "submit",
+    Cancel = "cancel",
+}
+
 export class DialogButton extends ComponentBase {
-    constructor(parent: HTMLElement, parentRef: ElementBase, text: string, style?: IElementStyleOptions) {
+    constructor(parent: HTMLElement, parentRef: ElementBase, text: string, readonly buttonType?: ButtonType, style?: IElementStyleOptions) {
         const el = ElementBase.createHTMLElement("button", parent);
         super(el, parentRef, ComponentType.Button);
         this.ref.textContent = text;

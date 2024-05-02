@@ -126,9 +126,10 @@
 
   // src/components/DialogButton.ts
   var DialogButton = class extends ComponentBase {
-    constructor(parent, parentRef, text, style) {
+    constructor(parent, parentRef, text, buttonType, style) {
       const el = ElementBase.createHTMLElement("button", parent);
       super(el, parentRef, "button" /* Button */);
+      this.buttonType = buttonType;
       this.ref.textContent = text;
       if (style)
         this.setStyle(style);
@@ -155,15 +156,20 @@
       this.addComponent(component);
       return component;
     }
-    addButton(text, style) {
-      const component = new DialogButton(this.ref, this, text, style);
+    addButton(text, buttonType, style) {
+      const component = new DialogButton(this.ref, this, text, buttonType, style);
       this.addComponent(component);
+      if (buttonType === "submit" /* Submit */)
+        component.ref.addEventListener("click", this.onSubmit);
+      else if (buttonType === "cancel" /* Cancel */)
+        component.ref.addEventListener("click", this.onCancel);
       console.log("Button added", this);
       return component;
     }
     addBox(style) {
       const el = ElementBase.createHTMLElement("div", this.ref);
       const box = new _Box(el, this, "box" /* Box */, style);
+      box.addClass("g-box");
       this.addComponent(box);
       return box;
     }
@@ -220,14 +226,20 @@
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
     const el = dialog.addBox();
-    el.addButton("Submit").getParent().addButton("Cancel").getParent().addClass("g-box");
+    el.onSubmit = () => {
+      alert("Submit clicked");
+    };
+    el.addButton("Submit", "submit" /* Submit */);
+    el.onCancel = () => {
+      alert("Cancel clicked");
+    };
+    el.addButton("Cancel", "cancel" /* Cancel */);
     dialog.ref.addEventListener("click", (e) => {
       console.log("Dialog clicked", e);
     });
     dialog.onClose = () => {
-      setInterval(() => {
-        dialog.show();
-      }, 1e3);
+      alert("Dialog closed");
+      dialog.show();
     };
   };
   init();

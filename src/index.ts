@@ -1,8 +1,6 @@
 import {Dialog} from "./Dialog";
 import {InputType} from "./enums/InputType";
-import {Box} from "./Box";
-import {ElementType} from "./components/ElementBase";
-import {ComponentBase} from "./components/ComponentBase";
+import {ButtonType} from "./components/DialogButton";
 
 
 const init = () => {
@@ -17,7 +15,18 @@ const init = () => {
     dialog.addInput(InputType.Text, "Username");
     dialog.addInput(InputType.Password, "Password")
     const el = dialog.addBox();
-    el.addButton("Submit").getParent<Box>().addButton("Cancel").getParent<Box>().addClass("g-box");
+    //el.addButton("Submit").getParent<Box>().addButton("Cancel").getParent<Box>().addClass("g-box");
+
+
+    el.onSubmit = () => {
+        alert("Submit clicked");
+    }
+    el.addButton("Submit", ButtonType.Submit);
+
+    el.onCancel = () => {
+        alert("Cancel clicked");
+    }
+    el.addButton("Cancel", ButtonType.Cancel);
 
 
     dialog.ref.addEventListener("click", (e) => {
@@ -25,10 +34,10 @@ const init = () => {
     });
 
     dialog.onClose = () => {
-        setInterval(() => {
-            dialog.show();
-        }, 1000);
+       alert("Dialog closed");
+       dialog.show();
     }
+
 
 }
 

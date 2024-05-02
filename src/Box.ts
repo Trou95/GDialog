@@ -4,11 +4,14 @@ import {ComponentBase} from "./components/ComponentBase";
 import {InputType} from "./enums/InputType";
 import {IElementStyleInputOptions} from "./interfaces/IElementStyleInputOptions";
 import {DialogInput} from "./components/DialogInput";
-import {DialogButton} from "./components/DialogButton";
+import {ButtonType, DialogButton} from "./components/DialogButton";
 import {Dialog} from "./Dialog";
 
 export class Box extends ElementBase {
     protected components: Array<ElementBase>;
+
+    public onSubmit: () => void;
+    public onCancel: () => void;
 
     protected constructor(ref: HTMLElement, parentRef: ElementBase | HTMLElement, elementType: ElementType, private style: IElementStyleOptions) {
         super(ref, parentRef, elementType || ElementType.Box);
@@ -26,9 +29,15 @@ export class Box extends ElementBase {
         return component;
     }
 
-    public addButton(text: string, style?: IElementStyleOptions) {
-        const component = new DialogButton(this.ref, this, text, style);
+    public addButton(text: string, buttonType?: ButtonType, style?: IElementStyleOptions) {
+        const component = new DialogButton(this.ref, this, text, buttonType,  style);
         this.addComponent(component);
+
+        if(buttonType === ButtonType.Submit)
+            component.ref.addEventListener("click", this.onSubmit);
+        else if(buttonType === ButtonType.Cancel)
+            component.ref.addEventListener("click", this.onCancel);
+
         console.log("Button added", this);
         return component;
     }
@@ -36,6 +45,7 @@ export class Box extends ElementBase {
     public addBox(style?: IElementStyleOptions): Box {
         const el = ElementBase.createHTMLElement("div", this.ref);
         const box = new Box(el, this, ElementType.Box, style);
+        box.addClass("g-box");
         this.addComponent(box);
         return box;
     }
