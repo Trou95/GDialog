@@ -13,6 +13,8 @@ export class Box extends ElementBase {
     protected constructor(ref: HTMLElement, parentRef: ElementBase | HTMLElement, elementType: ElementType, private style: IElementStyleOptions) {
         super(ref, parentRef, elementType || ElementType.Box);
 
+        this.components = new Array<ComponentBase>();
+
         if(style)
             this.setStyle(style);
     }
@@ -36,7 +38,11 @@ export class Box extends ElementBase {
         return new Box(el, this.ref, ElementType.Box, style);
     }
 
+    public getComponents() {
+        return this.components;
+    }
+
     protected addComponent(component: ComponentBase) {
-        //this.components.push(component);
+        this.components.push(component);
     }
 }

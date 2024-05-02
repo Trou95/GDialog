@@ -123,6 +123,7 @@
     constructor(ref, parentRef, elementType, style) {
       super(ref, parentRef, elementType || "box" /* Box */);
       this.style = style;
+      this.components = new Array();
       if (style)
         this.setStyle(style);
     }
@@ -142,7 +143,11 @@
       const el = ElementBase.createHTMLElement("div", this.ref);
       return new _Box(el, this.ref, "box" /* Box */, style);
     }
+    getComponents() {
+      return this.components;
+    }
     addComponent(component) {
+      this.components.push(component);
     }
   };
 
@@ -194,7 +199,6 @@
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
     dialog.addBox().addButton("Submit").getParent().addButton("Cancel").getParent().addClass("g-box");
-    dialog.show();
   };
   init();
 })();

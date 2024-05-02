@@ -17,7 +17,6 @@ const init = () => {
     dialog.addInput(InputType.Password, "Password")
     dialog.addBox().addButton("Submit").getParent<Box>().addButton("Cancel").getParent<Box>().addClass("g-box");
 
-    dialog.show();
 }
 
 init();
