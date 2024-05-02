@@ -183,7 +183,7 @@
 
   // src/Dialog.ts
   var Dialog = class _Dialog extends Box {
-    constructor(ref, parentRef, title, style) {
+    constructor(ref, parentRef, title, style, flags) {
       super(ref, parentRef, "dialog" /* Dialog */, style);
       this.visible = false;
       if (style)
@@ -191,6 +191,33 @@
       if (title) {
         this.dialogTitle = new DialogTitle(this.ref, this, title);
         this.dialogTitle.addClass("g-dialog-title");
+        if (flags & 1 /* Moveable */) {
+          this.isMoving = false;
+          this.setStyle({
+            position: "absolute"
+          });
+          this.dialogTitle.ref.addEventListener("mousedown", (e) => {
+            this.isMoving = true;
+            const rect = this.ref.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            const offsetY = e.clientY - rect.top;
+            const move = (e2) => {
+              if (this.isMoving) {
+                this.setStyle({
+                  left: e2.clientX - offsetX + "px",
+                  top: e2.clientY - offsetY + "px"
+                });
+              }
+            };
+            const stop = () => {
+              this.isMoving = false;
+              parentRef.removeEventListener("mousemove", move);
+              parentRef.removeEventListener("mouseup", stop);
+            };
+            parentRef.addEventListener("mousemove", move);
+            parentRef.addEventListener("mouseup", stop);
+          });
+        }
       }
       this.components = new Array();
     }
@@ -205,9 +232,9 @@
     get isVisible() {
       return this.visible;
     }
-    static createDialog(parent, title, style) {
+    static createDialog(parent, title, style, flags) {
       const el = super.createHTMLElement("div", parent);
-      const dialog = new _Dialog(el, parent, title, style);
+      const dialog = new _Dialog(el, parent, title, style, flags);
       dialog.addClass("g-dialog");
       return dialog;
     }
@@ -222,7 +249,7 @@
     if (!app)
       return;
     let dialogs = new Array();
-    const dialog = Dialog.createDialog(app, "Dialog 1");
+    const dialog = Dialog.createDialog(app, "Dialog 1", {}, 1 /* Moveable */);
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
     const el = dialog.addBox();
@@ -234,9 +261,6 @@
       alert("Cancel clicked");
     };
     el.addButton("Cancel", "cancel" /* Cancel */);
-    dialog.ref.addEventListener("click", (e) => {
-      console.log("Dialog clicked", e);
-    });
     dialog.onClose = () => {
       alert("Dialog closed");
       dialog.show();

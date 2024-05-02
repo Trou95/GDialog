@@ -1,4 +1,4 @@
-import {Dialog} from "./Dialog";
+import {Dialog, DialogFlags} from "./Dialog";
 import {InputType} from "./enums/InputType";
 import {ButtonType} from "./components/DialogButton";
 
@@ -10,7 +10,7 @@ const init = () => {
 
     let dialogs = new Array<Dialog>();
 
-    const dialog = Dialog.createDialog(app, "Dialog 1");
+    const dialog = Dialog.createDialog(app, "Dialog 1", {}, DialogFlags.Moveable);
 
     dialog.addInput(InputType.Text, "Username");
     dialog.addInput(InputType.Password, "Password")
@@ -28,16 +28,10 @@ const init = () => {
     }
     el.addButton("Cancel", ButtonType.Cancel);
 
-
-    dialog.ref.addEventListener("click", (e) => {
-        console.log("Dialog clicked", e);
-    });
-
     dialog.onClose = () => {
        alert("Dialog closed");
        dialog.show();
     }
-
 
 }
 
