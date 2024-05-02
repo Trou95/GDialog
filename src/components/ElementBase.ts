@@ -10,8 +10,10 @@ export enum ElementType {
 }
 
 export abstract class ElementBase implements IElement {
-    protected constructor(public readonly ref: HTMLElement, protected readonly parentRef: ElementBase | HTMLElement, private readonly elementType: ElementType ) {
+    public hash: string;
 
+    protected constructor(public readonly ref: HTMLElement, protected readonly parentRef: ElementBase | HTMLElement, private readonly elementType: ElementType) {
+        this.hash = ElementBase.generateHash();
     }
 
     getStyle(): CSSStyleDeclaration {
@@ -52,17 +54,25 @@ export abstract class ElementBase implements IElement {
         return this.ref.attributes;
     }
 
+    getElementType(): ElementType {
+        return this.elementType;
+    }
+
     getParent<T extends ElementBase>(): T {
         return this.parentRef as unknown as T;
     }
 
-    as<T extends Dialog | ComponentBase>(): T {
-        if (this.elementType === ElementType.Dialog)
-            return this as unknown as T;
-        else if (this.elementType === ElementType.Component)
-            return this as unknown as T;
-        else
-            throw new Error("Element type not recognized");
+    as<T extends Dialog | Box | ComponentBase>(): T {
+        return this as unknown as T;
+    }
+
+    public static generateHash(): string {
+        const hashTable = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?/!@#$%^&*()_+-=[]{}|;:,.<>?";
+        let hash = "";
+        for (let i = 0; i < 16; i++) {
+            hash += hashTable[Math.floor(Math.random() * hashTable.length)];
+        }
+        return hash;
     }
 
     protected static createHTMLElement(tag: string, parent: HTMLElement) {

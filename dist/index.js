@@ -1,10 +1,11 @@
 (() => {
   // src/components/ElementBase.ts
-  var ElementBase = class {
+  var ElementBase = class _ElementBase {
     constructor(ref, parentRef, elementType) {
       this.ref = ref;
       this.parentRef = parentRef;
       this.elementType = elementType;
+      this.hash = _ElementBase.generateHash();
     }
     getStyle() {
       return this.ref.style;
@@ -36,16 +37,22 @@
     getAttributes() {
       return this.ref.attributes;
     }
+    getElementType() {
+      return this.elementType;
+    }
     getParent() {
       return this.parentRef;
     }
     as() {
-      if (this.elementType === "dialog" /* Dialog */)
-        return this;
-      else if (this.elementType === "component" /* Component */)
-        return this;
-      else
-        throw new Error("Element type not recognized");
+      return this;
+    }
+    static generateHash() {
+      const hashTable = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?/!@#$%^&*()_+-=[]{}|;:,.<>?";
+      let hash = "";
+      for (let i = 0; i < 16; i++) {
+        hash += hashTable[Math.floor(Math.random() * hashTable.length)];
+      }
+      return hash;
     }
     static createHTMLElement(tag, parent) {
       const el = document.createElement(tag);
@@ -141,7 +148,9 @@
     }
     addBox(style) {
       const el = ElementBase.createHTMLElement("div", this.ref);
-      return new _Box(el, this.ref, "box" /* Box */, style);
+      const box = new _Box(el, this, "box" /* Box */, style);
+      this.addComponent(box);
+      return box;
     }
     getComponents() {
       return this.components;
@@ -198,7 +207,16 @@
     const dialog = Dialog.createDialog(app, "Dialog 1");
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
-    dialog.addBox().addButton("Submit").getParent().addButton("Cancel").getParent().addClass("g-box");
+    const el = dialog.addBox();
+    el.addButton("Submit").getParent().addButton("Cancel").getParent().addClass("g-box");
+    dialog.getComponents().forEach((c) => {
+      if (c.getElementType() == "box" /* Box */) {
+        const box = c;
+        const btn = box.getComponents()[0].ref.onclick = () => {
+          console.log("Button clicked");
+        };
+      }
+    });
   };
   init();
 })();

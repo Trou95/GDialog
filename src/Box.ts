@@ -8,7 +8,7 @@ import {DialogButton} from "./components/DialogButton";
 import {Dialog} from "./Dialog";
 
 export class Box extends ElementBase {
-    protected components: Array<ComponentBase>;
+    protected components: Array<ElementBase>;
 
     protected constructor(ref: HTMLElement, parentRef: ElementBase | HTMLElement, elementType: ElementType, private style: IElementStyleOptions) {
         super(ref, parentRef, elementType || ElementType.Box);
@@ -35,14 +35,16 @@ export class Box extends ElementBase {
 
     public addBox(style?: IElementStyleOptions): Box {
         const el = ElementBase.createHTMLElement("div", this.ref);
-        return new Box(el, this.ref, ElementType.Box, style);
+        const box = new Box(el, this, ElementType.Box, style);
+        this.addComponent(box);
+        return box;
     }
 
     public getComponents() {
         return this.components;
     }
 
-    protected addComponent(component: ComponentBase) {
+    protected addComponent(component: ElementBase) {
         this.components.push(component);
     }
 }

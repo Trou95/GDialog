@@ -1,7 +1,8 @@
 import {Dialog} from "./Dialog";
-import {Color} from "./enums/Color";
 import {InputType} from "./enums/InputType";
 import {Box} from "./Box";
+import {ElementType} from "./components/ElementBase";
+import {ComponentBase} from "./components/ComponentBase";
 
 
 const init = () => {
@@ -15,7 +16,18 @@ const init = () => {
 
     dialog.addInput(InputType.Text, "Username");
     dialog.addInput(InputType.Password, "Password")
-    dialog.addBox().addButton("Submit").getParent<Box>().addButton("Cancel").getParent<Box>().addClass("g-box");
+    const el = dialog.addBox();
+    el.addButton("Submit").getParent<Box>().addButton("Cancel").getParent<Box>().addClass("g-box");
+
+
+    dialog.getComponents().forEach(c => {
+        if(c.getElementType() == ElementType.Box) {
+          const box = c as Box;
+          const btn = box.getComponents()[0].ref.onclick = () => {
+                console.log("Button clicked");
+          }
+        }
+    });
 
 }
 
