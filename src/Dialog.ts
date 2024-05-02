@@ -12,19 +12,17 @@ export class Dialog extends Box {
     private isVisible: boolean;
     private dialogTitle: DialogTitle;
 
-    protected constructor(ref: HTMLElement, parentRef: any, title: string, style: IElementStyleOptions) {
+    protected constructor(ref: HTMLElement, parentRef: any, title?: string, style?: IElementStyleOptions) {
         super(ref, parentRef, ElementType.Dialog, style);
         this.isVisible = false;
 
         if(style)
             this.setStyle(style);
 
-        this.dialogTitle = new DialogTitle(this.ref, this, title, {
-            padding: "5",
-            backgroundColor: Color.Gray,
-            color: Color.White,
-            textAlign: TextAlign.Center,
-        });
+        if(title) {
+            this.dialogTitle = new DialogTitle(this.ref, this, title);
+            this.dialogTitle.addClass("g-dialog-title");
+        }
         this.components = new Array<ComponentBase>();
     }
 
@@ -48,7 +46,7 @@ export class Dialog extends Box {
     }
 
 
-    public static createDialog(parent: HTMLElement, title: string, style?: IElementStyleOptions) {
+    public static createDialog(parent: HTMLElement, title?: string, style?: IElementStyleOptions) {
         const el = super.createHTMLElement("div", parent);
         const dialog = new Dialog(el, parent, title, style);
         dialog.addClass("g-dialog");

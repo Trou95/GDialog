@@ -72,24 +72,11 @@
   var DialogTitle = class extends ComponentBase {
     constructor(parent, parentRef, title, style) {
       const header = ElementBase.createHTMLElement("div", parent);
-      header.style.width = "100%";
-      header.style.height = "20px";
-      header.style.display = "flex";
-      header.style.justifyContent = "space-between";
-      header.style.alignItems = "center";
-      header.style.height = style.height || "fit-content";
       const text = ElementBase.createHTMLElement("h1", header);
-      text.style.justifySelf = "flex-start";
-      text.style.fontSize = style.fontSize || "14px";
-      text.style.paddingLeft = "5px";
+      text.classList.add("g-dialog-header");
       const closeBtn = ElementBase.createHTMLElement("button", header);
+      closeBtn.classList.add("g-dialog-close-btn");
       closeBtn.innerHTML = "X";
-      closeBtn.style.color = style.color || "white";
-      closeBtn.style.backgroundColor = "transparent";
-      closeBtn.style.fontSize = style.fontSize || "14px";
-      closeBtn.style.border = "none";
-      closeBtn.style.cursor = "pointer";
-      closeBtn.classList.add("g-close-btn");
       text.innerHTML = title;
       super(header, parentRef, "caption" /* Caption */);
       if (style)
@@ -166,12 +153,10 @@
       this.isVisible = false;
       if (style)
         this.setStyle(style);
-      this.dialogTitle = new DialogTitle(this.ref, this, title, {
-        padding: "5",
-        backgroundColor: "gray" /* Gray */,
-        color: "white" /* White */,
-        textAlign: "center" /* Center */
-      });
+      if (title) {
+        this.dialogTitle = new DialogTitle(this.ref, this, title);
+        this.dialogTitle.addClass("g-dialog-title");
+      }
       this.components = new Array();
     }
     show() {
