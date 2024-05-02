@@ -20,14 +20,15 @@ const init = () => {
     el.addButton("Submit").getParent<Box>().addButton("Cancel").getParent<Box>().addClass("g-box");
 
 
-    dialog.getComponents().forEach(c => {
-        if(c.getElementType() == ElementType.Box) {
-          const box = c as Box;
-          const btn = box.getComponents()[0].ref.onclick = () => {
-                console.log("Button clicked");
-          }
-        }
+    dialog.ref.addEventListener("click", (e) => {
+        console.log("Dialog clicked", e);
     });
+
+    dialog.onClose = () => {
+        setInterval(() => {
+            dialog.show();
+        }, 1000);
+    }
 
 }
 

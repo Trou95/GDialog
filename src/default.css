@@ -19,6 +19,10 @@ button {
     background-color: skyblue;
 }
 
+.g-hidden {
+    display: none!important;
+}
+
 .g-dialog {
     width: 500px;
     height: fit-content;

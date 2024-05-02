@@ -6,6 +6,7 @@
       this.parentRef = parentRef;
       this.elementType = elementType;
       this.hash = _ElementBase.generateHash();
+      this.setAttribute("hash", this.hash);
     }
     getStyle() {
       return this.ref.style;
@@ -39,6 +40,14 @@
     }
     getElementType() {
       return this.elementType;
+    }
+    hide() {
+      if (this.ref.classList.contains("g-hidden"))
+        return;
+      this.ref.classList.add("g-hidden");
+    }
+    show() {
+      this.ref.classList.remove("g-hidden");
     }
     getParent() {
       return this.parentRef;
@@ -84,6 +93,12 @@
       const closeBtn = ElementBase.createHTMLElement("button", header);
       closeBtn.classList.add("g-dialog-close-btn");
       closeBtn.innerHTML = "X";
+      closeBtn.addEventListener("click", () => {
+        const dialog = parentRef;
+        dialog.hide();
+        if (dialog.onClose)
+          dialog.onClose();
+      });
       text.innerHTML = title;
       super(header, parentRef, "caption" /* Caption */);
       if (style)
@@ -164,7 +179,7 @@
   var Dialog = class _Dialog extends Box {
     constructor(ref, parentRef, title, style) {
       super(ref, parentRef, "dialog" /* Dialog */, style);
-      this.isVisible = false;
+      this.visible = false;
       if (style)
         this.setStyle(style);
       if (title) {
@@ -174,18 +189,15 @@
       this.components = new Array();
     }
     show() {
-      this.isVisible = true;
-      console.log("Dialog is visible", this.title);
+      this.visible = true;
+      super.show();
     }
     hide() {
-      this.isVisible = false;
-      this.ref.style.display = "none";
+      this.visible = false;
+      super.hide();
     }
-    get visible() {
-      return this.isVisible;
-    }
-    get title() {
-      return this.dialogTitle;
+    get isVisible() {
+      return this.visible;
     }
     static createDialog(parent, title, style) {
       const el = super.createHTMLElement("div", parent);
@@ -209,14 +221,14 @@
     dialog.addInput("password" /* Password */, "Password");
     const el = dialog.addBox();
     el.addButton("Submit").getParent().addButton("Cancel").getParent().addClass("g-box");
-    dialog.getComponents().forEach((c) => {
-      if (c.getElementType() == "box" /* Box */) {
-        const box = c;
-        const btn = box.getComponents()[0].ref.onclick = () => {
-          console.log("Button clicked");
-        };
-      }
+    dialog.ref.addEventListener("click", (e) => {
+      console.log("Dialog clicked", e);
     });
+    dialog.onClose = () => {
+      setInterval(() => {
+        dialog.show();
+      }, 1e3);
+    };
   };
   init();
 })();

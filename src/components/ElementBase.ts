@@ -14,6 +14,7 @@ export abstract class ElementBase implements IElement {
 
     protected constructor(public readonly ref: HTMLElement, protected readonly parentRef: ElementBase | HTMLElement, private readonly elementType: ElementType) {
         this.hash = ElementBase.generateHash();
+        this.setAttribute("hash", this.hash);
     }
 
     getStyle(): CSSStyleDeclaration {
@@ -56,6 +57,16 @@ export abstract class ElementBase implements IElement {
 
     getElementType(): ElementType {
         return this.elementType;
+    }
+
+    hide() : void {
+        if(this.ref.classList.contains("g-hidden"))
+            return;
+        this.ref.classList.add("g-hidden");
+    }
+
+    show() : void {
+        this.ref.classList.remove("g-hidden");
     }
 
     getParent<T extends ElementBase>(): T {

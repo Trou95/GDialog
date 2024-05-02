@@ -1,4 +1,4 @@
-import {ElementType} from "./components/ElementBase";
+import {ElementBase, ElementType} from "./components/ElementBase";
 import {DialogTitle} from "./components/DialogTitle";
 import {TextAlign} from "./enums/TextAlign";
 import {Color} from "./enums/Color";
@@ -9,12 +9,14 @@ import {Box} from "./Box";
 
 
 export class Dialog extends Box {
-    private isVisible: boolean;
+    private visible: boolean;
     private dialogTitle: DialogTitle;
+
+    public onClose : () => void;
 
     protected constructor(ref: HTMLElement, parentRef: HTMLElement, title?: string, style?: IElementStyleOptions) {
         super(ref, parentRef, ElementType.Dialog, style);
-        this.isVisible = false;
+        this.visible = false;
 
         if(style)
             this.setStyle(style);
@@ -27,24 +29,19 @@ export class Dialog extends Box {
     }
 
     public show() {
-        this.isVisible = true;
-        console.log("Dialog is visible", this.title);
+        this.visible = true;
+        super.show();
+        //console.log("Dialog is visible", this.title);
     }
 
     public hide() {
-        this.isVisible = false;
-        this.ref.style.display = "none";
-
+        this.visible = false;
+        super.hide();
     }
 
-    get visible() {
-        return this.isVisible;
+    get isVisible() {
+        return this.visible;
     }
-
-    get title() : DialogTitle {
-        return this.dialogTitle;
-    }
-
 
     public static createDialog(parent: HTMLElement, title?: string, style?: IElementStyleOptions) {
         const el = super.createHTMLElement("div", parent);

@@ -1,6 +1,7 @@
 import {ComponentBase, ComponentType} from "./ComponentBase";
 import {ElementBase} from "./ElementBase";
 import {IElementStyleOptions} from "../interfaces/IElementStyleOptions";
+import {Dialog} from "../Dialog";
 
 
 export class DialogTitle extends ComponentBase {
@@ -15,6 +16,12 @@ export class DialogTitle extends ComponentBase {
         const closeBtn = ElementBase.createHTMLElement("button", header);
         closeBtn.classList.add("g-dialog-close-btn");
         closeBtn.innerHTML = "X";
+        closeBtn.addEventListener("click", () => {
+            const dialog = parentRef as Dialog;
+            dialog.hide();
+            if(dialog.onClose)
+                dialog.onClose();
+        });
 
         text.innerHTML = title;
         super(header, parentRef, ComponentType.Caption);
