@@ -12,7 +12,7 @@ export class Dialog extends Box {
     private isVisible: boolean;
     private dialogTitle: DialogTitle;
 
-    protected constructor(ref: HTMLElement, parentRef: any, title?: string, style?: IElementStyleOptions) {
+    protected constructor(ref: HTMLElement, parentRef: HTMLElement, title?: string, style?: IElementStyleOptions) {
         super(ref, parentRef, ElementType.Dialog, style);
         this.isVisible = false;
 

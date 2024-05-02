@@ -3,7 +3,7 @@ import {IElementStyleOptions} from "../interfaces/IElementStyleOptions";
 import {ElementBase} from "./ElementBase";
 
 export class DialogButton extends ComponentBase {
-    constructor(parent: HTMLElement, parentRef: any, text: string, style?: IElementStyleOptions) {
+    constructor(parent: HTMLElement, parentRef: ElementBase, text: string, style?: IElementStyleOptions) {
         const el = ElementBase.createHTMLElement("button", parent);
         super(el, parentRef, ComponentType.Button);
         this.ref.textContent = text;

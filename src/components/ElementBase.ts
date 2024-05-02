@@ -10,7 +10,7 @@ export enum ElementType {
 }
 
 export abstract class ElementBase implements IElement {
-    protected constructor(public readonly ref: HTMLElement, protected readonly parentRef: any, private readonly elementType: ElementType ) {
+    protected constructor(public readonly ref: HTMLElement, protected readonly parentRef: ElementBase | HTMLElement, private readonly elementType: ElementType ) {
 
     }
 
@@ -52,8 +52,8 @@ export abstract class ElementBase implements IElement {
         return this.ref.attributes;
     }
 
-    getParent<T extends Dialog | Box>(): T {
-        return this.parentRef;
+    getParent<T extends ElementBase>(): T {
+        return this.parentRef as unknown as T;
     }
 
     as<T extends Dialog | ComponentBase>(): T {

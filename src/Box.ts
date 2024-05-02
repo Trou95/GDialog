@@ -5,11 +5,12 @@ import {InputType} from "./enums/InputType";
 import {IElementStyleInputOptions} from "./interfaces/IElementStyleInputOptions";
 import {DialogInput} from "./components/DialogInput";
 import {DialogButton} from "./components/DialogButton";
+import {Dialog} from "./Dialog";
 
 export class Box extends ElementBase {
     protected components: Array<ComponentBase>;
 
-    protected constructor(ref: HTMLElement, parentRef: any, elementType: ElementType, private style: IElementStyleOptions) {
+    protected constructor(ref: HTMLElement, parentRef: ElementBase | HTMLElement, elementType: ElementType, private style: IElementStyleOptions) {
         super(ref, parentRef, elementType || ElementType.Box);
 
         if(style)

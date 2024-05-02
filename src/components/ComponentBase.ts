@@ -8,7 +8,7 @@ export enum ComponentType {
 }
 
 export abstract class ComponentBase extends ElementBase {
-    protected constructor(ref: HTMLElement, parentRef: any, private readonly componentType: ComponentType) {
+    protected constructor(ref: HTMLElement, parentRef: ElementBase | HTMLElement, private readonly componentType: ComponentType) {
         super(ref, parentRef, ElementType.Component);
     }
 

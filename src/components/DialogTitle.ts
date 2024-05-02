@@ -4,7 +4,7 @@ import {IElementStyleOptions} from "../interfaces/IElementStyleOptions";
 
 
 export class DialogTitle extends ComponentBase {
-    constructor(parent: HTMLElement, parentRef: any, title: string, style?: IElementStyleOptions) {
+    constructor(parent: HTMLElement, parentRef: ElementBase, title: string, style?: IElementStyleOptions) {
         const header = ElementBase.createHTMLElement("div", parent);
 
 
