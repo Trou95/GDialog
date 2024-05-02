@@ -4,7 +4,7 @@ import {IElementStyleOptions} from "../interfaces/IElementStyleOptions";
 
 
 export class DialogTitle extends ComponentBase {
-    constructor(parent: HTMLElement, title: string, style?: IElementStyleOptions) {
+    constructor(parent: HTMLElement, parentRef: any, title: string, style?: IElementStyleOptions) {
         const header = ElementBase.createHTMLElement("div", parent);
 
         header.style.width = "100%";
@@ -29,21 +29,12 @@ export class DialogTitle extends ComponentBase {
         closeBtn.classList.add("g-close-btn");
 
         text.innerHTML = title;
-        super(header, ComponentType.Caption);
+        super(header, parentRef, ComponentType.Caption);
 
-        const styleOptions = style || {
-            color: "white",
-            backgroundColor: "black",
-            fontFamily: "Arial",
-            fontSize: "14px",
-            fontWeight: "normal",
-            width: "100%",
-            height: "20px",
-            padding: "0",
-        };
+        if(style)
+            this.setStyle(style);
         this.setStyle({
-            ...styleOptions,
-            "userSelect": "none",
+            userSelect: "none",
         })
     }
 }

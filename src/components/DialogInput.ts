@@ -4,26 +4,17 @@ import {IElementStyleInputOptions} from "../interfaces/IElementStyleInputOptions
 import {InputType} from "../enums/InputType";
 
 export class DialogInput extends ComponentBase {
-    constructor(parent: HTMLElement, type: InputType, style?: IElementStyleInputOptions) {
+    constructor(parent: HTMLElement, parentRef: any, type: InputType,  placeholder?: string, style?: IElementStyleInputOptions) {
         const el = ElementBase.createHTMLElement("input", parent);
-        super(el, ComponentType.Input);
-        this.ref.setAttribute("type", type);
+        super(el, parentRef, ComponentType.Input);
 
-        const styleOptions = {
-            color: style.color || "black",
-            backgroundColor: style.backgroundColor || "white",
-            fontSize: style.fontSize || "14px",
-            width: style.width || "90%",
-            height: style.height || "20px",
-            padding: style.padding || "5px",
-            margin: style.margin || "10px auto",
-            border: style.border || "1px solid black",
-            borderRadius: style.borderRadius || "5px",
-            boxShadow: style.boxShadow || "none",
-        };
+        this.ref.setAttribute("type", type);
+        this.ref.setAttribute("placeholder", placeholder);
+
+        if(style)
+            this.setStyle(style);
         this.setStyle({
-            ...styleOptions,
-            display: "block",
+            display: "block"
         })
     }
 }

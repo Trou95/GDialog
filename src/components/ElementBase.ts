@@ -1,6 +1,7 @@
 import {IElement} from "../interfaces/IElement";
-import {Dialog} from "../dialog";
+import {Dialog} from "../Dialog";
 import {ComponentBase} from "./ComponentBase";
+import {Box} from "../Box";
 
 export enum ElementType {
     Dialog = "dialog",
@@ -9,7 +10,9 @@ export enum ElementType {
 }
 
 export abstract class ElementBase implements IElement {
-    constructor(public readonly ref: HTMLElement, private readonly elementType: ElementType ) {}
+    protected constructor(public readonly ref: HTMLElement, protected readonly parentRef: any, private readonly elementType: ElementType ) {
+
+    }
 
     getStyle(): CSSStyleDeclaration {
         return this.ref.style;
@@ -47,6 +50,10 @@ export abstract class ElementBase implements IElement {
 
     getAttributes(): NamedNodeMap {
         return this.ref.attributes;
+    }
+
+    getParent<T extends Dialog | Box>(): T {
+        return this.parentRef;
     }
 
     as<T extends Dialog | ComponentBase>(): T {

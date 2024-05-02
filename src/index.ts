@@ -1,6 +1,7 @@
-import {Dialog} from "./dialog";
+import {Dialog} from "./Dialog";
 import {Color} from "./enums/Color";
 import {InputType} from "./enums/InputType";
+import {Box} from "./Box";
 
 
 const init = () => {
@@ -10,26 +11,12 @@ const init = () => {
 
     let dialogs = new Array<Dialog>();
 
-    const dialog = Dialog.createDialog(app, "Dialog 1", {
-        color: "black",
-        backgroundColor: Color.Orange,
-        fontSize: "14px",
-        width: "500px",
-        height: "200px",
-        borderRadius: "5px",
-    });
-    dialog.addInput(InputType.Text, {
-        color: Color.Black,
-        backgroundColor: Color.White,
-    });
-    dialog.addInput(InputType.Password, {
-        color: Color.Black,
-        backgroundColor: Color.White,
-    }).addClass("g-input");
-    dialog.addButton("Submit", {
-        color: Color.White,
-        backgroundColor: Color.Green,
-    }).addClass("submit-button");
+    const dialog = Dialog.createDialog(app, "Dialog 1");
+
+    dialog.addInput(InputType.Text, "Username");
+    dialog.addInput(InputType.Password, "Password")
+    dialog.addBox().addButton("Submit").getParent<Box>().addButton("Cancel").getParent<Box>().addClass("g-box");
+
     dialog.show();
 }
 

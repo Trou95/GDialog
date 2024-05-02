@@ -1,8 +1,9 @@
 (() => {
   // src/components/ElementBase.ts
   var ElementBase = class {
-    constructor(ref, elementType) {
+    constructor(ref, parentRef, elementType) {
       this.ref = ref;
+      this.parentRef = parentRef;
       this.elementType = elementType;
     }
     getStyle() {
@@ -35,6 +36,9 @@
     getAttributes() {
       return this.ref.attributes;
     }
+    getParent() {
+      return this.parentRef;
+    }
     as() {
       if (this.elementType === "dialog" /* Dialog */)
         return this;
@@ -55,8 +59,8 @@
 
   // src/components/ComponentBase.ts
   var ComponentBase = class extends ElementBase {
-    constructor(ref, componentType) {
-      super(ref, "component" /* Component */);
+    constructor(ref, parentRef, componentType) {
+      super(ref, parentRef, "component" /* Component */);
       this.componentType = componentType;
     }
     getType() {
@@ -66,7 +70,7 @@
 
   // src/components/DialogTitle.ts
   var DialogTitle = class extends ComponentBase {
-    constructor(parent, title, style) {
+    constructor(parent, parentRef, title, style) {
       const header = ElementBase.createHTMLElement("div", parent);
       header.style.width = "100%";
       header.style.height = "20px";
@@ -87,44 +91,25 @@
       closeBtn.style.cursor = "pointer";
       closeBtn.classList.add("g-close-btn");
       text.innerHTML = title;
-      super(header, "caption" /* Caption */);
-      const styleOptions = style || {
-        color: "white",
-        backgroundColor: "black",
-        fontFamily: "Arial",
-        fontSize: "14px",
-        fontWeight: "normal",
-        width: "100%",
-        height: "20px",
-        padding: "0"
-      };
+      super(header, parentRef, "caption" /* Caption */);
+      if (style)
+        this.setStyle(style);
       this.setStyle({
-        ...styleOptions,
-        "userSelect": "none"
+        userSelect: "none"
       });
     }
   };
 
   // src/components/DialogInput.ts
   var DialogInput = class extends ComponentBase {
-    constructor(parent, type, style) {
+    constructor(parent, parentRef, type, placeholder, style) {
       const el = ElementBase.createHTMLElement("input", parent);
-      super(el, "input" /* Input */);
+      super(el, parentRef, "input" /* Input */);
       this.ref.setAttribute("type", type);
-      const styleOptions = {
-        color: style.color || "black",
-        backgroundColor: style.backgroundColor || "white",
-        fontSize: style.fontSize || "14px",
-        width: style.width || "90%",
-        height: style.height || "20px",
-        padding: style.padding || "5px",
-        margin: style.margin || "10px auto",
-        border: style.border || "1px solid black",
-        borderRadius: style.borderRadius || "5px",
-        boxShadow: style.boxShadow || "none"
-      };
+      this.ref.setAttribute("placeholder", placeholder);
+      if (style)
+        this.setStyle(style);
       this.setStyle({
-        ...styleOptions,
         display: "block"
       });
     }
@@ -132,84 +117,56 @@
 
   // src/components/DialogButton.ts
   var DialogButton = class extends ComponentBase {
-    constructor(parent, text, style) {
+    constructor(parent, parentRef, text, style) {
       const el = ElementBase.createHTMLElement("button", parent);
-      super(el, "button" /* Button */);
+      super(el, parentRef, "button" /* Button */);
       this.ref.textContent = text;
-      const styleOptions = {
-        color: style.color || "black",
-        backgroundColor: style.backgroundColor || "white",
-        fontSize: style.fontSize || "14px",
-        width: style.width || "auto",
-        height: style.height || "auto",
-        padding: style.padding || "5px",
-        margin: style.margin || "10px auto",
-        border: style.border || "1px solid black",
-        borderRadius: style.borderRadius || "5px",
-        boxShadow: style.boxShadow || "none"
-      };
+      if (style)
+        this.setStyle(style);
       this.setStyle({
-        ...styleOptions,
         display: "block",
         cursor: "pointer"
       });
+      this.addClass("g-btn");
     }
   };
 
   // src/Box.ts
   var Box = class _Box extends ElementBase {
-    constructor(ref, elementType, style) {
-      super(ref, elementType || "box" /* Box */);
+    constructor(ref, parentRef, elementType, style) {
+      super(ref, parentRef, elementType || "box" /* Box */);
       this.style = style;
-      const styleOptions = style || {
-        color: "black",
-        backgroundColor: "white",
-        fontFamily: "Arial",
-        fontSize: "14px",
-        fontWeight: "normal",
-        width: "100%",
-        height: "20px",
-        padding: "5px"
-      };
-      this.setStyle(styleOptions);
+      if (style)
+        this.setStyle(style);
     }
-    addInput(type, style) {
-      const component = new DialogInput(this.ref, type, style);
+    addInput(type, placeholder, style) {
+      const component = new DialogInput(this.ref, this, type, placeholder, style);
+      component.addClass("g-input");
       this.addComponent(component);
       return component;
     }
     addButton(text, style) {
-      const component = new DialogButton(this.ref, text, style);
+      const component = new DialogButton(this.ref, this, text, style);
       this.addComponent(component);
+      console.log("Button added", this);
       return component;
     }
     addBox(style) {
       const el = ElementBase.createHTMLElement("div", this.ref);
-      return new _Box(el, "box" /* Box */, style);
+      return new _Box(el, this.ref, "box" /* Box */, style);
     }
     addComponent(component) {
-      this.components.push(component);
     }
   };
 
-  // src/dialog.ts
+  // src/Dialog.ts
   var Dialog = class _Dialog extends Box {
-    constructor(ref, title, style) {
-      super(ref, "dialog" /* Dialog */, style);
+    constructor(ref, parentRef, title, style) {
+      super(ref, parentRef, "dialog" /* Dialog */, style);
       this.isVisible = false;
-      const styleOptions = {
-        color: style.color || "black",
-        backgroundColor: style.backgroundColor || "white",
-        fontSize: style.fontSize || "14px",
-        width: style.width || "100%",
-        height: style.height || "auto",
-        padding: style.padding || "0",
-        margin: style.margin || "auto",
-        display: style.display || "block",
-        border: style.border || "none"
-      };
-      this.setStyle(styleOptions);
-      this.dialogTitle = new DialogTitle(this.ref, title, {
+      if (style)
+        this.setStyle(style);
+      this.dialogTitle = new DialogTitle(this.ref, this, title, {
         padding: "5",
         backgroundColor: "gray" /* Gray */,
         color: "white" /* White */,
@@ -219,7 +176,6 @@
     }
     show() {
       this.isVisible = true;
-      this.ref.style.display = "block";
       console.log("Dialog is visible", this.title);
     }
     hide() {
@@ -234,7 +190,9 @@
     }
     static createDialog(parent, title, style) {
       const el = super.createHTMLElement("div", parent);
-      return new _Dialog(el, title, style);
+      const dialog = new _Dialog(el, parent, title, style);
+      dialog.addClass("g-dialog");
+      return dialog;
     }
     static destroyDialog(dialog) {
       throw new Error("Not implemented");
@@ -247,26 +205,10 @@
     if (!app)
       return;
     let dialogs = new Array();
-    const dialog = Dialog.createDialog(app, "Dialog 1", {
-      color: "black",
-      backgroundColor: "orange" /* Orange */,
-      fontSize: "14px",
-      width: "500px",
-      height: "200px",
-      borderRadius: "5px"
-    });
-    dialog.addInput("text" /* Text */, {
-      color: "black" /* Black */,
-      backgroundColor: "white" /* White */
-    });
-    dialog.addInput("password" /* Password */, {
-      color: "black" /* Black */,
-      backgroundColor: "white" /* White */
-    }).addClass("g-input");
-    dialog.addButton("Submit", {
-      color: "white" /* White */,
-      backgroundColor: "green" /* Green */
-    }).addClass("submit-button");
+    const dialog = Dialog.createDialog(app, "Dialog 1");
+    dialog.addInput("text" /* Text */, "Username");
+    dialog.addInput("password" /* Password */, "Password");
+    dialog.addBox().addButton("Submit").getParent().addButton("Cancel").getParent().addClass("g-box");
     dialog.show();
   };
   init();

@@ -1,0 +1,58 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#app {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: skyblue;
+}
+
+.g-dialog {
+    width: 500px;
+    height: fit-content;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.g-input {
+    width: 90%;
+    height: 25px;
+    margin: 5px 0;
+    padding: 15px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: block;
+}
+
+.g-btn {
+    min-height: 30px;
+    margin: 5px 5px;
+    padding: 5px 30px;
+    color: white;
+    background-color: skyblue;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.g-btn:hover{
+    background-color: deepskyblue;
+    transition: 1s;
+}
+
+.g-box {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+}

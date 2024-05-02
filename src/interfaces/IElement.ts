@@ -1,4 +1,4 @@
-import {Dialog} from "../dialog";
+import {Dialog} from "../Dialog";
 import {ComponentBase} from "../components/ComponentBase";
 
 export interface IElement {
