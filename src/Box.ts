@@ -6,6 +6,7 @@ import {IElementStyleInputOptions} from "./interfaces/IElementStyleInputOptions"
 import {DialogInput} from "./components/DialogInput";
 import {ButtonType, DialogButton} from "./components/DialogButton";
 import {Dialog} from "./Dialog";
+import {DialogText, TextBlockType} from "./components/DialogText";
 
 export class Box extends ElementBase {
     protected components: Array<ElementBase>;
@@ -48,6 +49,14 @@ export class Box extends ElementBase {
         box.addClass("g-box");
         this.addComponent(box);
         return box;
+    }
+
+    public addText(text: string, textBlockType?: TextBlockType, style?: IElementStyleOptions) {
+        const el = ElementBase.createHTMLElement(textBlockType || TextBlockType.Paragraph, this.ref);
+        const textComponent = new DialogText(el, this, text, textBlockType, style);
+        textComponent.addClass("g-text");
+        this.addComponent(textComponent);
+        return textComponent;
     }
 
     public getComponents() {

@@ -5,6 +5,7 @@ export enum ComponentType {
     Button = "button",
     Select = "select",
     Caption = "caption",
+    Text = "text",
 }
 
 export abstract class ComponentBase extends ElementBase {

@@ -13,6 +13,7 @@ const init = () => {
 
     const dialog = Dialog.createDialog(app, "Dialog 1", {}, DialogFlags.Moveable);
 
+    dialog.addText("Please enter your credentials");
     dialog.addInput(InputType.Text, "Username");
     dialog.addInput(InputType.Password, "Password")
     dialog.addBox()

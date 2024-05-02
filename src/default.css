@@ -91,3 +91,11 @@ button {
     display: flex;
     justify-content: center;
 }
+
+.g-text {
+    width: 100%;
+    height: fit-content;
+    color: black;
+    padding: 10px;
+    text-align: center;
+}

@@ -141,6 +141,19 @@
     }
   };
 
+  // src/components/DialogText.ts
+  var DialogText = class extends ComponentBase {
+    constructor(parent, parentRef, text, textBlockType, style) {
+      super(parent, parentRef, "text" /* Text */);
+      this.ref.innerText = text;
+      if (style)
+        this.setStyle(style);
+      this.setStyle({
+        display: "block"
+      });
+    }
+  };
+
   // src/Box.ts
   var Box = class _Box extends ElementBase {
     constructor(ref, parentRef, elementType, style) {
@@ -172,6 +185,13 @@
       box.addClass("g-box");
       this.addComponent(box);
       return box;
+    }
+    addText(text, textBlockType, style) {
+      const el = ElementBase.createHTMLElement(textBlockType || "p" /* Paragraph */, this.ref);
+      const textComponent = new DialogText(el, this, text, textBlockType, style);
+      textComponent.addClass("g-text");
+      this.addComponent(textComponent);
+      return textComponent;
     }
     getComponents() {
       return this.components;
@@ -250,6 +270,7 @@
       return;
     let dialogs = new Array();
     const dialog = Dialog.createDialog(app, "Dialog 1", {}, 1 /* Moveable */);
+    dialog.addText("Please enter your credentials");
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
     dialog.addBox().addButton("Submit", "submit" /* Submit */).getParent().addButton("Cancel", "cancel" /* Cancel */);
