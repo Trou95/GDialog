@@ -252,18 +252,9 @@
     const dialog = Dialog.createDialog(app, "Dialog 1", {}, 1 /* Moveable */);
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
-    const el = dialog.addBox();
-    el.onSubmit = () => {
-      alert("Submit clicked");
-    };
-    el.addButton("Submit", "submit" /* Submit */);
-    el.onCancel = () => {
-      alert("Cancel clicked");
-    };
-    el.addButton("Cancel", "cancel" /* Cancel */);
+    dialog.addBox().addButton("Submit", "submit" /* Submit */).getParent().addButton("Cancel", "cancel" /* Cancel */);
     dialog.onClose = () => {
-      alert("Dialog closed");
-      dialog.show();
+      dialog.hide();
     };
   };
   init();
