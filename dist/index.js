@@ -154,6 +154,24 @@
     }
   };
 
+  // src/components/DıalogSelect.ts
+  var DialogSelect = class extends ComponentBase {
+    constructor(parent, parentRef, options, style) {
+      const el = ElementBase.createHTMLElement("select", parent);
+      super(el, parentRef, "select" /* Select */);
+      options.forEach((option) => {
+        const opt = ElementBase.createHTMLElement("option", el);
+        opt.textContent = option;
+        opt.setAttribute("value", option);
+      });
+      if (style)
+        this.setStyle(style);
+      this.setStyle({
+        display: "block"
+      });
+    }
+  };
+
   // src/Box.ts
   var Box = class _Box extends ElementBase {
     constructor(ref, parentRef, elementType, style) {
@@ -192,6 +210,12 @@
       textComponent.addClass("g-text");
       this.addComponent(textComponent);
       return textComponent;
+    }
+    addSelect(options, style) {
+      const component = new DialogSelect(this.ref, this, options, style);
+      component.addClass("g-select");
+      this.addComponent(component);
+      return component;
     }
     getComponents() {
       return this.components;
@@ -274,6 +298,7 @@
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
     dialog.addBox().addButton("Submit", "submit" /* Submit */).getParent().addButton("Cancel", "cancel" /* Cancel */);
+    dialog.addSelect(["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]);
     dialog.onClose = () => {
       dialog.hide();
     };

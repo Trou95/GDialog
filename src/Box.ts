@@ -7,6 +7,7 @@ import {DialogInput} from "./components/DialogInput";
 import {ButtonType, DialogButton} from "./components/DialogButton";
 import {Dialog} from "./Dialog";
 import {DialogText, TextBlockType} from "./components/DialogText";
+import {DialogSelect} from "./components/DıalogSelect";
 
 export class Box extends ElementBase {
     protected components: Array<ElementBase>;
@@ -57,6 +58,14 @@ export class Box extends ElementBase {
         textComponent.addClass("g-text");
         this.addComponent(textComponent);
         return textComponent;
+    }
+
+    public addSelect(options: string[], style?: IElementStyleOptions) {
+        const component = new DialogSelect(this.ref, this, options, style);
+        component.addClass("g-select");
+        this.addComponent(component);
+        return component;
+
     }
 
     public getComponents() {
