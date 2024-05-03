@@ -4,4 +4,5 @@ export enum InputType {
     Password = "password",
     Number = "number",
     Email = "email",
+    Range = "range",
 }

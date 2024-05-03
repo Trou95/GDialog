@@ -8,6 +8,7 @@ import {ButtonType, DialogButton} from "./components/DialogButton";
 import {Dialog} from "./Dialog";
 import {DialogText, TextBlockType} from "./components/DialogText";
 import {DialogSelect} from "./components/DıalogSelect";
+import {DialogInputRange} from "./components/DialogInputRange";
 
 export class Box extends ElementBase {
     protected components: Array<ElementBase>;
@@ -27,6 +28,13 @@ export class Box extends ElementBase {
     public addInput(type: InputType, placeholder?: string, style?: IElementStyleInputOptions) : DialogInput {
         const component = new DialogInput(this.ref, this, type, placeholder, style);
         component.addClass("g-input");
+        this.addComponent(component);
+        return component;
+    }
+
+    public addInputRange(min: number, max: number, placeholder?: string, style?: IElementStyleInputOptions) {
+        const component = new DialogInputRange(this.ref, this, min, max, placeholder, style);
+        component.addClass("g-input-range");
         this.addComponent(component);
         return component;
     }
@@ -65,7 +73,6 @@ export class Box extends ElementBase {
         component.addClass("g-select");
         this.addComponent(component);
         return component;
-
     }
 
     public getComponents() {

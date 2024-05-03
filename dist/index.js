@@ -172,6 +172,15 @@
     }
   };
 
+  // src/components/DialogInputRange.ts
+  var DialogInputRange = class extends DialogInput {
+    constructor(parent, parentRef, min, max, placeholder, style) {
+      super(parent, parentRef, "range" /* Range */, placeholder, style);
+      this.ref.setAttribute("min", min.toString());
+      this.ref.setAttribute("max", max.toString());
+    }
+  };
+
   // src/Box.ts
   var Box = class _Box extends ElementBase {
     constructor(ref, parentRef, elementType, style) {
@@ -184,6 +193,12 @@
     addInput(type, placeholder, style) {
       const component = new DialogInput(this.ref, this, type, placeholder, style);
       component.addClass("g-input");
+      this.addComponent(component);
+      return component;
+    }
+    addInputRange(min, max, placeholder, style) {
+      const component = new DialogInputRange(this.ref, this, min, max, placeholder, style);
+      component.addClass("g-input-range");
       this.addComponent(component);
       return component;
     }
@@ -298,7 +313,7 @@
     dialog.addInput("text" /* Text */, "Username");
     dialog.addInput("password" /* Password */, "Password");
     dialog.addBox().addButton("Submit", "submit" /* Submit */).getParent().addButton("Cancel", "cancel" /* Cancel */);
-    dialog.addSelect(["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]);
+    dialog.addInputRange(0, 100, "Range");
     dialog.onClose = () => {
       dialog.hide();
     };

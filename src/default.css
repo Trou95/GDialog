@@ -106,3 +106,34 @@ button {
     margin: 5px 0;
     border-radius: 5px;
 }
+
+.g-input-range {
+    width: 90%;
+    margin: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    box-sizing: border-box;
+    background-color: skyblue;
+    border-radius: 20px;
+}
+
+.g-input-range::-moz-range-track {
+    color: white;
+    background-color: white;;
+}
+
+.g-input-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 100%;
+}
+
+.g-input-range::-webkit-slider-runnable-track {
+    border-radius: 20px;
+}
